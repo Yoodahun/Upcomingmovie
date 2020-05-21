@@ -66,7 +66,7 @@ if __name__=='__main__':
                 if key in row:
                     print(row)
                     print(key, value)
-                    updateData.append((key, value[0], value[1]))
+                    updateData.append((value[0], value[1], key))
 
         cur.executemany('UPDATE parsed_data_parsed_movie SET title=?, date=? where code=?',
                         updateData
