@@ -47,31 +47,29 @@ def parse_movie():
     return movie
 
 cur=con.cursor()
-cur.execute('SELECT * FROM parsed_data_parsed_movie')
+cur.execute('SELECT code FROM parsed_data_parsed_movie')
 updateData=[]
 
 if __name__=='__main__':
     movie_dict=parse_movie()
     # print(movie_dict)
+    for key, value in movie_dict.items():
 
-
-    try:
-        for key, value in movie_dict.items():
+        try:
             parsed_movie(title=value[0], date=value[1], code=key).save()
 
-    except:
-        print("Exception!")
-        for key, value in movie_dict.items():
-            for row in cur:
-                if key in row:
-                    print(row)
-                    print(key, value)
-                    updateData.append((value[0], value[1], key))
+        except:
+            # print("Exception!")
+            # print(key, value)
+            updateData.append((value[0], value[1], key))
+            # for row in cur:
+            #     print(row)
+            #     if key in row:
+            #         print("true")
 
-        cur.executemany('UPDATE parsed_data_parsed_movie SET title=?, date=? where code=?',
-                        updateData
-                        )
-
-    finally:
-        con.commit()
-        con.close()
+    print(updateData)
+    cur.executemany('UPDATE parsed_data_parsed_movie SET title=?, date=? where code=?',
+                    updateData
+                    )
+    con.commit()
+    con.close()
